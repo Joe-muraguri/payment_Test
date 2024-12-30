@@ -104,7 +104,7 @@ def sendStkPush(phone_number):
         "PartyA": phone_number,
         "PartyB": shortCode,
         "PhoneNumber": phone_number,
-        "CallBackURL": "https://ff87-217-199-151-102.ngrok-free.app/callbackurl",
+        "CallBackURL": "https://payment-test-1.onrender.com/callbackurl",
         "AccountReference": "account",
         "TransactionDesc": "test"
     }
