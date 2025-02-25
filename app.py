@@ -3,6 +3,12 @@ import requests
 import base64
 from datetime import datetime
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+
 
 
 app = Flask(__name__)
@@ -40,14 +46,14 @@ def handle_callback():
 
 
 def generate_access_token():
-    consumer_key = "J2EhCi7sG9XvBeSZKGGBEhQlaxRJn8c6"
-    consumer_secret = "clS8XsGA3uibzTif"
+    consumer_key = os.getenv("CONSUMER_KEY")
+    consumer_secret = os.getenv("CONSUMER_SECRET")
 
     #choose one depending on you development environment
     #sandbox
-    url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+    # url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
     #live
-    # url = "https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+    url = "https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
 
     try:
         
@@ -78,7 +84,7 @@ def generate_access_token():
 def sendStkPush(phone_number):
     token = generate_access_token()
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-    shortCode = "174379"  #sandbox -174379
+    shortCode = os.getenv("SHORT_CODE")  #sandbox -174379
     passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
     stk_password = base64.b64encode((shortCode + passkey + timestamp).encode('utf-8')).decode('utf-8')
 
@@ -86,9 +92,9 @@ def sendStkPush(phone_number):
     
     #choose one depending on you development environment
     #sandbox
-    url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+    # url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     #live
-    # url = "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+    url = "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     
     headers = {
         'Authorization': 'Bearer ' + token,
@@ -104,9 +110,9 @@ def sendStkPush(phone_number):
         "PartyA": phone_number,
         "PartyB": shortCode,
         "PhoneNumber": phone_number,
-        "CallBackURL": "https://payment-test-1.onrender.com/callbackurl",
-        "AccountReference": "account",
-        "TransactionDesc": "test"
+        "CallBackURL": "https://lipia.onrender.com/callbackurl",
+        "AccountReference": "Payment",
+        "TransactionDesc": "Pay internet"
     }
     
     try:
@@ -121,5 +127,5 @@ import os
 
 
  # Get the port from the environment variable or default to 5000
-port = int(os.environ.get("PORT", 5000))
+port = int(os.environ.get("PORT", 10000))
 app.run(debug=True, host='0.0.0.0', port=port)
