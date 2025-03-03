@@ -17,7 +17,7 @@ consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
 passkey = os.getenv('PASSKEY')
 shortCode = os.getenv('SHORT_CODE')
-print(f"CONSUMER KEY:{consumer_key}, CONSUMER SECRET:{consumer_secret} AND SHORTCODE:{shortCode}")
+
 
 # PostgreSQL
 # app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://user:password@localhost/wifi_billing"
@@ -103,7 +103,7 @@ def generate_access_token():
 
         # Send the request and parse the response
         response = requests.get(url, headers=headers).json()
-        print(f"Your access token is {response['access_token']}")
+        
 
         # Check for errors and return the access token
         if "access_token" in response:
