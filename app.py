@@ -85,7 +85,7 @@ def generate_access_token():
     if not consumer_key or not consumer_secret:
         raise ValueError("Missing CONSUMER_KEY or CONSUMER_SECRET in environment variables")
 
-    #choose one depending on you development environment
+
     #sandbox
     # url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
     #live
@@ -103,11 +103,14 @@ def generate_access_token():
 
         # Send the request and parse the response
         response = requests.get(url, headers=headers).json()
+
+        print(f"ACCESS TOKEN:{response["access_token"]}" )
         
 
         # Check for errors and return the access token
         if "access_token" in response:
             return response["access_token"]
+        
         else:
             raise Exception("Failed to get access token: " + response["error_description"])
     except Exception as e:
