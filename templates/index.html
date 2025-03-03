@@ -13,16 +13,46 @@
 
     </header>
 
-    <div class="total">
-        <h2>Your Total : Ksh 500</h2>
-        <h3>Lipa Na Mpesa</h3>
-        <form action="{{url_for('index')}}" method="post">
-            <input type="number" name="phone" placeholder="Enter Safaricom number to pay">
-            <br>
-            <button class="pay_btn" type="submit">PAY</button>
-        </form>
-        
+    <div class="packages">
+        <div class="package-1">
+            <h2>YOUR CART</h2>
+            <p>Ksh <span>15</span></p>
+            <button onclick="selectPackage('2Hr', 1)" class="package-button select-package" data-amount="15" data-package="2Hr">Proceed to Payment</button>
+        </div>
     </div>
+
+
+    <div class="modal" id="payment-modal">
+        <div class="modal-content">
+            <div class="modal" id="close-modal">
+                <span class="close-btn" onclick="closeModal('payment-modal')">&times;</span>
+            </div>
+            <h2 id="selected-package">Enter your Safaricom number for Mpesa prompt</h2>
+            <form  id="payment-form">
+                <input type="hidden" name="mac" id="mac" value="{{ mac }}">
+            <input type="tel" name="phone-number" id="phone-number" placeholder="Enter Mpesa Number" required>
+            <button type="submit">Pay</button>
+            </form>
+        </div>
+    </div>
+    <div class="modal" id="processing-modal">
+        <div class="modal-content">
+            <h2>Please Wait...</h2>
+            <p>We are verifying your payment. This may take a few seconds.</p>
+        </div>
+    </div>
+    
+    <div class="modal" id="success-modal">
+        <div class="modal-content">
+            <h2>Payment Successful!</h2>
+            <p class="checkmark">Thanks</p>
+            <p>You are now connected to the Internet</p>
+        </div>
+    </div>
+    <div id="success-animation">Payment Successful! You're now connected</div>
+    </div>
+
+    
     
     {% endblock %}
     

@@ -1,42 +1,309 @@
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+AU+SA:wght@100..400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+
 body{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Roboto", sans-serif;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1d2671, #c33764);
+    color: #fff;
+    overflow-x: hidden;
 }
-.header{
-    padding: 8px 10px;
-    margin-bottom: 25px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+.container{
+    max-width: 900px;
+    margin: 20px auto;
+    text-align: center;
+    padding: 0 20px;
 }
 
+h1{
+    text-transform: uppercase;
+    background: linear-gradient(to right, #ff6a00, #e0dddf);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.instructions{
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.instructions h2{
+    font-size: 1.8rem;
+    line-height: 1.6;
+    
+    
+}
+
+
 .heading{
-    color: crimson;
+    color: blueviolet;
+}
+.logo{
+    width: 120px;
+    max-width: 100%;
+    height: 110px;
+    color: #fff;
+}
+
+.header{
+    padding: 2rem;
+    justify-content: center;
+    text-align: center;
+    
+    display: flex;
+    align-items: center;
+}
+
+.fa-wifi{
+    color: blueviolet;
+    margin-right: 0.7rem;
     font-weight: 700;
 }
 
-.total{
-    padding: 5px 8px;
-    width: 30%;
+.packages{
+    margin-top: 1.6rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+span{
+    font-size: 2rem;
+}
+
+.package-1{
+    background: linear-gradient(145deg, #ff6a00, #ee0979);
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    width: 100%;
+    margin: auto;
+    padding: 2rem;
     justify-content: center;
     text-align: center;
-    margin: auto;
-    border-radius: 8px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    background-color: #A4CCFC;
+    border-radius: 0.8rem;
+    margin-top: 1.2rem;
+    overflow: hidden;
+    position: relative;
+
 }
-.pay_btn{
-    padding: 8px 18px;
-    outline: none;
-    background-color: #1CACF4;
+
+.package-1:hover{
+    transform: translateY(-10px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes rotateGlow {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.package-1 h2 {
+    font-size: 1.8rem;
+    color: #fff;
+    z-index: 1;
+    position: relative;
+}
+.package-1 p {
+    font-size: 1rem;
+    color: #04FC44;
+    z-index: 1;
+    position: relative;
+}
+
+input {
+    width: 90%;
+    max-width: 400px;
+    padding: 10px;
     border: none;
-    cursor: pointer;
-
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    text-align: center;
 }
 
-input{
-    padding: 8px 12px;
+input::placeholder{
+    color: #ccc;
+}
+
+.payment-button {
+    background: linear-gradient(90deg, #36d1dc, #5b86e5);
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.payment-button:hover{
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+}
+
+#payment-section {
+    display: none;
+    margin-top: 20px;
+}
+
+#success-animation {
+    display: none;
+    margin-top: 30px;
+    font-size: 2rem;
+    color: #00ff7f;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #1d2671;
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.modal-content h2 {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.modal-content input[type="tel"] {
+    width: 90%;
+    max-width: 300px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.modal-content input[type="tel"]::placeholder {
+    color: #ccc;
+}
+
+.modal-content button {
+    background: linear-gradient(90deg, #36d1dc, #5b86e5);
+    color: #fff;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.modal-content button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
+}
+
+.modal-content .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.modal-content .close-btn:hover{
+    color: #ff6a00;
+}
+#success-modal {
+    display: none;
+}
+
+#success-modal .modal-content {
+    background: #28a745;
+    color: #fff;
+}
+
+#success-modal h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+#success-modal .checkmark {
+    font-size: 4rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.package-button{
+    padding: 0.8rem;
     outline: none;
-    border-radius: 8px;
-    margin-bottom: 5px;
+    border: none;
+    border-radius: 1rem;
+    background-color: #FCE40C;
+}
+
+@media (max-width: 600px) {
+    h1{
+        font-size: 2rem;
+    }
+    .instructions h2 {
+        font-size: 1.5rem;
+    }
+
+    .package-1 h2{
+        font-size: 1.3rem;
+    }
+    .package-1 p {
+        font-size: 0.9rem;
+    }
+
+    input{
+        width: 100%;
+    }
+
+    button{
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    #payment-section {
+        display: none;
+        margin-top: 20px;
+    }
+    
 }
