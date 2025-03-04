@@ -9,7 +9,12 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 
 
+db = SQLAlchemy()
+
 app = Flask(__name__)
+
+
+
 
 # SQLite (for local testing)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
@@ -25,8 +30,8 @@ shortCode = os.getenv('SHORT_CODE')
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app)
 
+db.init_app(app)
 
 
 
@@ -79,7 +84,7 @@ class Transaction(db.Model):
 with app.app_context():
     db.create_all()
 
-    
+
 def generate_access_token():
     consumer_key = os.getenv('CONSUMER_KEY')
     
