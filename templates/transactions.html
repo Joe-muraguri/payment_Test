@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<header class="header">
+    <nav>
+        <h1 class="heading">Malipo</h1>
+    </nav>
+
+</header>
+
+<div>
+    {% for transaction in transactions %}
+    <h1>{{ transaction.amount }}</h1>
+    <h1>{{ transaction.phone_number }}</h1>
+    <h1>{{ transaction.transaction_code }}</h1>
+    <h1>{{ transaction.transaction_date }}</h1>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -91,7 +91,7 @@ class Transaction(db.Model):
     amount = db.Column(db.Float, nullable=False)
     mpesa_code = db.Column(db.String(255), unique=True, nullable=False)
     status = db.Column(db.String(255), nullable=False, default="pending")
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now)
 
     def __repr__(self):
         return f"Transaction('{self.phone}', '{self.amount}', '{self.mpesa_code}', '{self.status}')"
@@ -213,12 +213,22 @@ def handle_callback():
             status = "success" if result_code == 0 else "failed"
             print(f"status is : {status}")
 
+            transaction = Transaction(phone=phone_number, amount=amount, mpesa_code=mpesa_code, status=status)
+            db.session.add(transaction)
+
+            db.session.commit()
+            return jsonify({"status":"success", "message":"Transaction has been recorded"})
+        else:
+            status = "failed"
+            print(f"status is : {status}")
+
+
             # transaction = Transaction(phone=phone_number, amount=amount, mpesa_code=mpesa_code, status=status)
 
             # db.session.add(transaction)
             # db.session.commit()
 
-            return jsonify({"status":"success", "message":"Transaction has been recorded"})
+            return jsonify({"status":"failed", "message":"Transaction failed"})
     # except Exception as e:
     #     db.session.rollback()
     #     return jsonify({"status": "error", "message": str(e)}), 500
