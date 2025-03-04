@@ -234,6 +234,12 @@ def handle_callback():
     #     return jsonify({"status": "error", "message": str(e)}), 500
 
 
+@app.route('/transactions')
+def transactions():
+    transactions = Transaction.query.all()
+    return render_template('transactions.html', transactions=transactions)
+
+
 @app.route('/confirm_payment')
 def confirm_payment():
     return render_template('confirm_payment.html')
