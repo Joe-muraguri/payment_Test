@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 
 
-db = SQLAlchemy()
+
 
 app = Flask(__name__)
 
@@ -30,8 +30,8 @@ shortCode = os.getenv('SHORT_CODE')
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+db = SQLAlchemy(app)
 
-db.init_app(app)
 
 
 
@@ -73,11 +73,10 @@ class Transaction(db.Model):
     status = db.Column(db.String(255), nullable=False, default="pending")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, phone, amount, mpesa_code, mac_address, status="pending"):
+    def __init__(self, phone, amount, mpesa_code,  status="pending"):
         self.phone = phone
         self.amount = amount
         self.mpesa_code = mpesa_code
-        self.mac_address = mac_address
         self.status = status
 
 with app.app_context():
@@ -169,36 +168,40 @@ def sendStkPush(phone_number,package_amount):
 
 @app.route('/callback', methods=['POST'])
 def handle_callback():
-    callback_data = request.json
-    print(callback_data)
-    result_code = callback_data['Body']['stkCallback']['ResultCode']
+    try:
+        callback_data = request.json
+        print(callback_data)
+        result_code = callback_data['Body']['stkCallback']['ResultCode']
 
-    #capture the MAC address of the user from the user session
-    
-
-    if result_code == 0:
-        callback_metadata = callback_data['Body']['stkCallback']['CallbackMetadata']
-        amount = None
-        phone_number = None
-        for item in callback_metadata['Item']:
-            if item['Name'] == 'Amount':
-                amount = item['Value']
-            elif item['Name'] == 'PhoneNumber':
-                phone_number = item['Value']
-            elif item['Name'] == 'MpesaReceiptNumber':
-                mpesa_code = item['Value']
-
-        #Saving the data in the database
-        status = "success" if result_code == 0 else "failed"
-
-        transaction = Transaction(phone=phone_number, amount=amount, mpesa_code=mpesa_code, status=status)
-
-        db.session.add(transaction)
-        db.session.commit()
-
+        #capture the MAC address of the user from the user session
         
 
-        return jsonify({"status":"success", "message":"Transaction has been recorded"})
+        if result_code == 0:
+            callback_metadata = callback_data['Body']['stkCallback']['CallbackMetadata']
+            amount = None
+            phone_number = None
+            for item in callback_metadata['Item']:
+                if item['Name'] == 'Amount':
+                    amount = item['Value']
+                elif item['Name'] == 'PhoneNumber':
+                    phone_number = item['Value']
+                elif item['Name'] == 'MpesaReceiptNumber':
+                    mpesa_code = item['Value']
+
+            #Saving the data in the database
+            status = "success" if result_code == 0 else "failed"
+
+            transaction = Transaction(phone=phone_number, amount=amount, mpesa_code=mpesa_code, status=status)
+
+            db.session.add(transaction)
+            db.session.commit()
+
+            
+
+            return jsonify({"status":"success", "message":"Transaction has been recorded"})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 @app.route('/confirm_payment')
