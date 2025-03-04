@@ -93,12 +93,8 @@ class Transaction(db.Model):
     status = db.Column(db.String(255), nullable=False, default="pending")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, phone, amount, mpesa_code,  status="pending"):
-        self.phone = phone
-        self.amount = amount
-        self.mpesa_code = mpesa_code
-        self.status = status
-
+    def __repr__(self):
+        return f"Transaction('{self.phone}', '{self.amount}', '{self.mpesa_code}', '{self.status}')"
 
 
 
@@ -205,13 +201,17 @@ def handle_callback():
             for item in callback_metadata['Item']:
                 if item['Name'] == 'Amount':
                     amount = item['Value']
+                    print(f"Paid Amaount is : {amount}")
                 elif item['Name'] == 'PhoneNumber':
                     phone_number = item['Value']
+                    print(f"Phone number is : {phone_number}")
                 elif item['Name'] == 'MpesaReceiptNumber':
                     mpesa_code = item['Value']
+                    print(f"Mpesa code is : {mpesa_code}")
 
             #Saving the data in the database
             status = "success" if result_code == 0 else "failed"
+            print(f"status is : {status}")
 
             # transaction = Transaction(phone=phone_number, amount=amount, mpesa_code=mpesa_code, status=status)
 
