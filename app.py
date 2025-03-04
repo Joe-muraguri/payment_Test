@@ -5,6 +5,7 @@ from datetime import datetime
 import json
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+
 import os
 
 
@@ -26,15 +27,13 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
+
+
+
 load_dotenv()
 
 
 
-
-
-
-
-app = Flask(__name__)
 
 app.secret_key = 'a_very_secret_key_123'
 
@@ -77,6 +76,10 @@ class Transaction(db.Model):
         self.mac_address = mac_address
         self.status = status
 
+with app.app_context():
+    db.create_all()
+
+    
 def generate_access_token():
     consumer_key = os.getenv('CONSUMER_KEY')
     
@@ -167,7 +170,7 @@ def handle_callback():
     result_code = callback_data['Body']['stkCallback']['ResultCode']
 
     #capture the MAC address of the user from the user session
-    mac_address = request.headers.get('X-User-MAC')
+    
 
     if result_code == 0:
         callback_metadata = callback_data['Body']['stkCallback']['CallbackMetadata']
