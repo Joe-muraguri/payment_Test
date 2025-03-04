@@ -205,10 +205,10 @@ def handle_callback():
             #Saving the data in the database
             status = "success" if result_code == 0 else "failed"
 
-            transaction = Transaction(phone=phone_number, amount=amount, mpesa_code=mpesa_code, status=status)
+            # transaction = Transaction(phone=phone_number, amount=amount, mpesa_code=mpesa_code, status=status)
 
-            db.session.add(transaction)
-            db.session.commit()
+            # db.session.add(transaction)
+            # db.session.commit()
 
             return jsonify({"status":"success", "message":"Transaction has been recorded"})
     except Exception as e:
