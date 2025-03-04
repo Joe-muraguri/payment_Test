@@ -36,10 +36,12 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///transactions.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
+    with app.app_context():
+        db.create_all()
 
     return app
 
@@ -68,6 +70,10 @@ def process_payment():
     phone_number = data['phoneNumber']
     phone_number = phone_number.strip()
 
+  
+
+    
+
     if phone_number.startswith('07'):
         phone_number = '254' + phone_number[1:]
     
@@ -75,7 +81,7 @@ def process_payment():
 
     # ! Logging received data
     print(f"Payment: for {phone_number}")
-
+   
     return jsonify({"status":"success", "message":"Payment processed successfully"})
 
 
@@ -93,8 +99,10 @@ class Transaction(db.Model):
         self.mpesa_code = mpesa_code
         self.status = status
 
-with app.app_context():
-    db.create_all()
+
+
+
+    
 
 
 def generate_access_token():
@@ -124,7 +132,7 @@ def generate_access_token():
         # Send the request and parse the response
         response = requests.get(url, headers=headers).json()
 
-        print(f"ACCESS TOKEN:{response["access_token"]}" )
+        
         
 
         # Check for errors and return the access token
@@ -182,7 +190,7 @@ def sendStkPush(phone_number,package_amount):
 
 @app.route('/callback', methods=['POST'])
 def handle_callback():
-    try:
+    # try:
         callback_data = request.json
         print(callback_data)
         result_code = callback_data['Body']['stkCallback']['ResultCode']
@@ -211,9 +219,9 @@ def handle_callback():
             # db.session.commit()
 
             return jsonify({"status":"success", "message":"Transaction has been recorded"})
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"status": "error", "message": str(e)}), 500
+    # except Exception as e:
+    #     db.session.rollback()
+    #     return jsonify({"status": "error", "message": str(e)}), 500
 
 
 @app.route('/confirm_payment')
