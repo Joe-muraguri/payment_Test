@@ -11,13 +11,13 @@ import os
 
 
 
-app = Flask(__name__)
+
 
 
 
 
 # SQLite (for local testing)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+
 
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
@@ -28,9 +28,23 @@ shortCode = os.getenv('SHORT_CODE')
 # PostgreSQL
 # app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://user:password@localhost/wifi_billing"
 
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app)
+
+db = SQLAlchemy()
+
+
+def create_app():
+    app = Flask(__name__)
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    db.init_app(app)
+
+    return app
+
+app = create_app()
+
 
 
 
@@ -173,7 +187,7 @@ def handle_callback():
         print(callback_data)
         result_code = callback_data['Body']['stkCallback']['ResultCode']
 
-        #capture the MAC address of the user from the user session
+        
         
 
         if result_code == 0:
@@ -196,8 +210,6 @@ def handle_callback():
             db.session.add(transaction)
             db.session.commit()
 
-            
-
             return jsonify({"status":"success", "message":"Transaction has been recorded"})
     except Exception as e:
         db.session.rollback()
@@ -214,5 +226,6 @@ def confirm_payment():
 
 
  # Get the port from the environment variable or default to 5000
-port = int(os.environ.get("PORT", 10000))
-app.run(debug=True, host='0.0.0.0', port=port)
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))
+    app.run(debug=True, host='0.0.0.0', port=port)
