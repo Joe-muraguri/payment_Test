@@ -70,7 +70,6 @@ class Transaction(db.Model):
     phone = db.Column(db.String(255), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     mpesa_code = db.Column(db.String(255), unique=True, nullable=False)
-    mac_address = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(255), nullable=False, default="pending")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -192,7 +191,7 @@ def handle_callback():
         #Saving the data in the database
         status = "success" if result_code == 0 else "failed"
 
-        transaction = Transaction(phone=phone_number, amount=amount, mpesa_code=mpesa_code, mac_address=mac_address, status=status)
+        transaction = Transaction(phone=phone_number, amount=amount, mpesa_code=mpesa_code, status=status)
 
         db.session.add(transaction)
         db.session.commit()
